@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İngilizce Seviye Tespit Testi</title>
+    <title>Dil Seviye Tespit Testi</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -18,285 +13,348 @@
             color: #333;
         }
         .container {
-            max-width: 700px;
+            max-width: 720px;
             margin: 0 auto;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
             overflow: hidden;
         }
         header {
-            background: #4a5568;
+            background: #2d3748;
             color: white;
-            padding: 25px 20px;
+            padding: 28px 20px;
             text-align: center;
         }
-        header h1 {
-            font-size: 1.6rem;
-            margin-bottom: 6px;
+        header h1 { font-size: 1.7rem; margin-bottom: 6px; }
+        header p { font-size: 0.95rem; opacity: 0.9; }
+        .screen { padding: 30px 25px; }
+        .hidden { display: none !important; }
+
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 10px;
         }
-        header p {
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
-        .progress-bar {
-            height: 8px;
-            background: #e2e8f0;
-        }
-        .progress {
-            height: 100%;
-            background: #48bb78;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        .quiz-area {
-            padding: 30px 25px;
-        }
-        .question-number {
-            font-size: 0.85rem;
-            color: #718096;
-            margin-bottom: 8px;
-        }
-        .question-text {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 22px;
-            line-height: 1.4;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .option {
-            padding: 14px 18px;
+        .lang-btn {
+            padding: 22px 10px;
             border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            border-radius: 14px;
+            background: #f7fafc;
+            font-size: 1.15rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1rem;
-            background: #f7fafc;
+            text-align: center;
         }
-        .option:hover {
-            border-color: #667eea;
-            background: #edf2f7;
-        }
-        .option.selected {
+        .lang-btn:hover {
             border-color: #667eea;
             background: #ebf4ff;
+            transform: translateY(-2px);
         }
+        .lang-btn span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #718096;
+            margin-top: 4px;
+        }
+
+        .progress-bar { height: 8px; background: #e2e8f0; }
+        .progress { height: 100%; background: #48bb78; width: 0%; transition: width 0.3s; }
+        .question-number { font-size: 0.9rem; color: #718096; margin-bottom: 8px; }
+        .question-text { font-size: 1.25rem; font-weight: 600; margin-bottom: 22px; line-height: 1.4; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            padding: 15px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #f7fafc;
+            font-size: 1.15rem;
+            transition: all 0.2s;
+        }
+        .option:hover { border-color: #667eea; background: #edf2f7; }
+        .option.selected { border-color: #667eea; background: #ebf4ff; }
         .controls {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 28px;
             gap: 12px;
         }
         button {
-            padding: 12px 24px;
+            padding: 14px 26px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
-        #prevBtn {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-        #prevBtn:hover {
-            background: #cbd5e0;
-        }
-        #nextBtn, #submitBtn {
-            background: #667eea;
-            color: white;
-            margin-left: auto;
-        }
-        #nextBtn:hover, #submitBtn:hover {
-            background: #5a67d8;
-        }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .result-screen {
-            display: none;
-            text-align: center;
-            padding: 40px 25px;
-        }
-        .result-screen h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #2d3748;
-        }
-        .score {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #667eea;
-            margin: 20px 0;
-        }
-        .level {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .description {
-            color: #718096;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        .restart-btn {
-            background: #48bb78;
-            color: white;
-            padding: 14px 32px;
-        }
-        .restart-btn:hover {
-            background: #38a169;
-        }
-        .hidden {
-            display: none;
-        }
+        #prevBtn { background: #e2e8f0; color: #4a5568; }
+        #prevBtn:hover { background: #cbd5e0; }
+        #nextBtn, #submitBtn { background: #667eea; color: white; margin-left: auto; }
+        #nextBtn:hover, #submitBtn:hover { background: #5a67d8; }
+        button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .result-screen { text-align: center; padding: 40px 25px; }
+        .score { font-size: 3.2rem; font-weight: 700; color: #2d3748; margin: 18px 0; }
+        .level { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; color: #2d3748; }
+        .description { color: #4a5568; margin-bottom: 28px; line-height: 1.55; font-size: 1.05rem; }
+        .restart-btn { background: #48bb78; color: white; padding: 15px 36px; }
+        .restart-btn:hover { background: #38a169; }
+        .back-lang { background: #edf2f7; color: #4a5568; margin-top: 12px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>İngilizce Seviye Tespit Testi</h1>
-            <p>10 soruluk kısa test • Doğru cevaplar tamamen karışık</p>
+            <h1>Dil Seviye Tespit Testi</h1>
+            <p id="headerDesc">Hangi dili test etmek istiyorsun?</p>
         </header>
-        
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
 
-        <div class="quiz-area" id="quizArea">
-            <div class="question-number" id="questionNumber">Soru 1 / 10</div>
-            <div class="question-text" id="questionText"></div>
-            <div class="options" id="options"></div>
-            
-            <div class="controls">
-                <button id="prevBtn" disabled>← Önceki</button>
-                <button id="nextBtn">Sonraki →</button>
-                <button id="submitBtn" class="hidden">Sonuçları Gör</button>
+        <div class="screen" id="langScreen">
+            <div class="lang-grid">
+                <div class="lang-btn" onclick="startQuiz('japanese')">🇯🇵 Japonca<span>日本語</span></div>
+                <div class="lang-btn" onclick="startQuiz('korean')">🇰🇷 Korece<span>한국어</span></div>
+                <div class="lang-btn" onclick="startQuiz('russian')">🇷🇺 Rusça<span>Русский</span></div>
+                <div class="lang-btn" onclick="startQuiz('english')">🇬🇧 İngilizce<span>English</span></div>
+                <div class="lang-btn" onclick="startQuiz('french')">🇫🇷 Fransızca<span>Français</span></div>
+                <div class="lang-btn" onclick="startQuiz('spanish')">🇪🇸 İspanyolca<span>Español</span></div>
             </div>
         </div>
 
-        <div class="result-screen" id="resultScreen">
+        <div class="hidden" id="quizScreen">
+            <div class="progress-bar"><div class="progress" id="progress"></div></div>
+            <div class="screen">
+                <div class="question-number" id="questionNumber">Soru 1 / 30</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+                <div class="controls">
+                    <button id="prevBtn" disabled>← Önceki</button>
+                    <button id="nextBtn">Sonraki →</button>
+                    <button id="submitBtn" class="hidden">Sonuçları Gör</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-screen hidden" id="resultScreen">
             <h2>Test Sonucu</h2>
-            <div class="score" id="scoreDisplay">0/10</div>
+            <div class="score" id="scoreDisplay">0/30</div>
             <div class="level" id="levelDisplay"></div>
             <div class="description" id="description"></div>
-            <button class="restart-btn" onclick="restartQuiz()">Tekrar Dene</button>
+            <button class="restart-btn" onclick="restartQuiz()">Aynı Dilde Tekrar Dene</button>
+            <br>
+            <button class="back-lang" onclick="backToLang()">Başka Dil Seç</button>
         </div>
     </div>
 
     <script>
-        const questions = [
-            {
-                question: "Which sentence is grammatically correct?",
-                options: [
-                    "She don't like coffee.",
-                    "She doesn't likes coffee.",
-                    "She not like coffee.",
-                    "She doesn't like coffee."
-                ],
-                correct: 3   // 4. seçenek
-            },
-            {
-                question: "Choose the correct word: I have been living here _____ 2018.",
-                options: [
-                    "for",
-                    "during",
-                    "since",
-                    "while"
-                ],
-                correct: 2   // 3. seçenek
-            },
-            {
-                question: "What is the past participle of 'write'?",
-                options: [
-                    "wrote",
-                    "writing",
-                    "writes",
-                    "written"
-                ],
-                correct: 3   // 4. seçenek
-            },
-            {
-                question: "Select the correct sentence:",
-                options: [
-                    "If I will see him, I will tell him.",
-                    "If I see him, I will tell him.",
-                    "If I saw him, I will tell him.",
-                    "If I see him, I would tell him."
-                ],
-                correct: 1   // 2. seçenek
-            },
-            {
-                question: "Which word is a synonym of 'happy'?",
-                options: [
-                    "sad",
-                    "angry",
-                    "tired",
-                    "joyful"
-                ],
-                correct: 3   // 4. seçenek
-            },
-            {
-                question: "Complete: She is interested _____ learning languages.",
-                options: [
-                    "on",
-                    "at",
-                    "for",
-                    "in"
-                ],
-                correct: 3   // 4. seçenek
-            },
-            {
-                question: "Choose the correct form: By this time tomorrow, I _____ the report.",
-                options: [
-                    "will finish",
-                    "finish",
-                    "will have finished",
-                    "am finishing"
-                ],
-                correct: 2   // 3. seçenek
-            },
-            {
-                question: "What does 'to break the ice' mean?",
-                options: [
-                    "To destroy something cold",
-                    "To stop talking",
-                    "To make someone angry",
-                    "To start a conversation in a friendly way"
-                ],
-                correct: 3   // 4. seçenek
-            },
-            {
-                question: "Which sentence uses the passive voice correctly?",
-                options: [
-                    "The letter was written by John.",
-                    "John was written the letter.",
-                    "The letter wrote by John.",
-                    "John written the letter."
-                ],
-                correct: 0   // 1. seçenek
-            },
-            {
-                question: "Choose the correct comparative form:",
-                options: [
-                    "more better",
-                    "more good",
-                    "gooder",
-                    "better"
-                ],
-                correct: 3   // 4. seçenek
-            }
-        ];
+        const allQuestions = {
+            english: [
+                {q:"Which sentence is correct?", o:["She don't like coffee.","She doesn't likes coffee.","She not like coffee.","She doesn't like coffee."], c:3},
+                {q:"I have lived here _____ 2019.", o:["for","during","since","while"], c:2},
+                {q:"Past participle of 'write'?", o:["wrote","writing","writes","written"], c:3},
+                {q:"If I _____ him, I will tell him.", o:["will see","see","saw","seen"], c:1},
+                {q:"Synonym of 'happy'?", o:["sad","angry","tired","joyful"], c:3},
+                {q:"She is interested _____ languages.", o:["on","at","for","in"], c:3},
+                {q:"By tomorrow I _____ the report.", o:["will finish","finish","will have finished","am finishing"], c:2},
+                {q:"'Break the ice' means:", o:["Destroy ice","Stop talking","Make angry","Start friendly conversation"], c:3},
+                {q:"Passive: The letter _____ by John.", o:["was written","wrote","was wrote","written"], c:0},
+                {q:"Comparative of 'good'?", o:["more better","more good","gooder","better"], c:3},
+                {q:"I _____ to the cinema yesterday.", o:["go","goes","went","gone"], c:2},
+                {q:"She _____ English for 5 years.", o:["studies","is studying","has studied","study"], c:2},
+                {q:"This is _____ book I have ever read.", o:["the more interesting","the most interesting","more interesting","most interesting"], c:1},
+                {q:"He is _____ than his brother.", o:["tall","taller","tallest","more tall"], c:1},
+                {q:"I wish I _____ richer.", o:["am","was","were","be"], c:2},
+                {q:"The film was directed _____ Nolan.", o:["from","by","with","of"], c:1},
+                {q:"Neither John _____ Mary came.", o:["or","and","nor","but"], c:2},
+                {q:"She asked me where I _____.", o:["live","lived","lives","living"], c:1},
+                {q:"I look forward _____ from you.", o:["to hear","hearing","to hearing","hear"], c:2},
+                {q:"Despite _____ hard, he failed.", o:["he worked","working","worked","he working"], c:1},
+                {q:"The more you practice, _____ you become.", o:["the better","better","the best","best"], c:0},
+                {q:"I would rather you _____ here.", o:["stay","stayed","staying","to stay"], c:1},
+                {q:"It's high time we _____.", o:["leave","left","leaving","to leave"], c:1},
+                {q:"Hardly _____ when it started raining.", o:["I arrived","had I arrived","I had arrived","did I arrive"], c:1},
+                {q:"She is used to _____ up early.", o:["get","getting","got","gets"], c:1},
+                {q:"I'd rather _____ tea than coffee.", o:["drink","to drink","drinking","drank"], c:0},
+                {q:"No sooner _____ than the phone rang.", o:["I sat","had I sat","I had sat","did I sit"], c:1},
+                {q:"He speaks as if he _____ everything.", o:["knows","knew","know","knowing"], c:1},
+                {q:"The house _____ last year.", o:["built","was built","has built","is built"], c:1},
+                {q:"I suggest that he _____ a doctor.", o:["sees","see","saw","seeing"], c:1}
+            ],
+            french: [
+                {q:"« Bonjour » ne demektir?", o:["İyi akşamlar","Merhaba","Hoşça kal","Teşekkürler"], c:1},
+                {q:"« Je m'appelle » ne demek?", o:["Ben severim","Benim adım","Ben istiyorum","Ben yaşıyorum"], c:1},
+                {q:"Fransızca teşekkür ederim?", o:["S'il vous plaît","Merci","Pardon","De rien"], c:1},
+                {q:"« Oui » ne demektir?", o:["Hayır","Belki","Evet","Tamam"], c:2},
+                {q:"« Non » ne demektir?", o:["Evet","Hayır","Lütfen","Rica ederim"], c:1},
+                {q:"« Comment allez-vous ? » ne sorar?", o:["Adın ne?","Nerelisin?","Nasılsın?","Kaç yaşındasın?"], c:2},
+                {q:"« Je suis » ne demek?", o:["Ben ...yim","Ben istiyorum","Ben yapıyorum","Ben gidiyorum"], c:0},
+                {q:"Fransızca su?", o:["pain","eau","lait","vin"], c:1},
+                {q:"« Homme » ne demektir?", o:["Kadın","Çocuk","Erkek","Ev"], c:2},
+                {q:"« Femme » ne demektir?", o:["Adam","Kadın","Kız","Anne"], c:1},
+                {q:"« Merci beaucoup » ne demek?", o:["Rica ederim","Çok teşekkürler","Özür dilerim","Lütfen"], c:1},
+                {q:"Fransızca evet lütfen?", o:["Oui s'il vous plaît","Non merci","De rien","Pardon"], c:0},
+                {q:"« Au revoir » ne zaman kullanılır?", o:["Merhaba","Teşekkür","Hoşça kal","Özür"], c:2},
+                {q:"« Je ne comprends pas » ne demek?", o:["Anlamıyorum","Bilmiyorum","İstemiyorum","Görmüyorum"], c:0},
+                {q:"Fransızca kitap?", o:["livre","cahier","stylo","table"], c:0},
+                {q:"« Où est... ? » ne sorar?", o:["Kim?","Ne?","Nerede?","Ne zaman?"], c:2},
+                {q:"« Combien ça coûte ? » ne demek?", o:["Saat kaç?","Ne kadar?","Nerede?","Nasıl?"], c:1},
+                {q:"Fransızca güzel?", o:["bon","beau","grand","petit"], c:1},
+                {q:"« Je voudrais » ne demek?", o:["İstiyorum","Yapıyorum","Gidiyorum","Seviyorum"], c:0},
+                {q:"« S'il vous plaît » ne demektir?", o:["Teşekkürler","Rica ederim","Lütfen","Özür dilerim"], c:2},
+                {q:"Fransızca ekmek?", o:["eau","pain","fromage","viande"], c:1},
+                {q:"« Il fait beau » ne demek?", o:["Hava güzel","Hava soğuk","Hava yağmurlu","Hava rüzgarlı"], c:0},
+                {q:"« Parlez-vous français ? »", o:["Fransızca biliyor musunuz?","Fransız mısınız?","Fransa'da mısınız?","Fransızca seviyor musunuz?"], c:0},
+                {q:"Fransızca arkadaş?", o:["ami","frère","soeur","père"], c:0},
+                {q:"« Je t'aime » ne demek?", o:["Seni seviyorum","Seni özlüyorum","Seni bekliyorum","Seni görüyorum"], c:0},
+                {q:"Fransızca günaydın?", o:["Bonsoir","Bonne nuit","Bonjour","Salut"], c:2},
+                {q:"« Excusez-moi » ne demek?", o:["Teşekkürler","Affedersiniz","Lütfen","Rica ederim"], c:1},
+                {q:"Fransızca ev?", o:["maison","voiture","école","ville"], c:0},
+                {q:"« Je suis fatigué » ne demek?", o:["Açım","Yorgunum","Mutluyum","Üzgünüm"], c:1},
+                {q:"Fransızca teşekkürlerin cevabı?", o:["Merci","De rien","Pardon","S'il vous plaît"], c:1}
+            ],
+            spanish: [
+                {q:"« Hola » ne demektir?", o:["Hoşça kal","Merhaba","Teşekkürler","Lütfen"], c:1},
+                {q:"« Gracias » ne demek?", o:["Lütfen","Teşekkürler","Özür dilerim","Evet"], c:1},
+                {q:"İspanyolca evet?", o:["No","Sí","Tal vez","Claro"], c:1},
+                {q:"« Me llamo » ne demek?", o:["Ben severim","Benim adım","Ben istiyorum","Ben yaşıyorum"], c:1},
+                {q:"« ¿Cómo estás? » ne sorar?", o:["Adın ne?","Nasılsın?","Nerelisin?","Kaç yaşındasın?"], c:1},
+                {q:"İspanyolca su?", o:["pan","agua","leche","vino"], c:1},
+                {q:"« Adiós » ne zaman kullanılır?", o:["Merhaba","Hoşça kal","Teşekkür","Özür"], c:1},
+                {q:"« Por favor » ne demek?", o:["Teşekkürler","Lütfen","Rica ederim","Özür dilerim"], c:1},
+                {q:"İspanyolca ekmek?", o:["agua","pan","queso","carne"], c:1},
+                {q:"« No entiendo » ne demek?", o:["Bilmiyorum","Anlamıyorum","İstemiyorum","Görmüyorum"], c:1},
+                {q:"« Muchas gracias » ne demek?", o:["Rica ederim","Çok teşekkürler","Özür dilerim","Lütfen"], c:1},
+                {q:"İspanyolca kitap?", o:["libro","cuaderno","bolígrafo","mesa"], c:0},
+                {q:"« ¿Dónde está...? » ne sorar?", o:["Kim?","Ne?","Nerede?","Ne zaman?"], c:2},
+                {q:"« ¿Cuánto cuesta? » ne demek?", o:["Saat kaç?","Ne kadar?","Nerede?","Nasıl?"], c:1},
+                {q:"İspanyolca güzel?", o:["bueno","bonito","grande","pequeño"], c:1},
+                {q:"« Quisiera » ne demek?", o:["İstiyorum","Yapıyorum","Gidiyorum","Seviyorum"], c:0},
+                {q:"« De nada » ne demek?", o:["Teşekkürler","Rica ederim","Lütfen","Özür dilerim"], c:1},
+                {q:"İspanyolca ev?", o:["casa","coche","escuela","ciudad"], c:0},
+                {q:"« Hablo un poco de español »", o:["İspanyolca bilmiyorum","Biraz İspanyolca konuşuyorum","İspanyolca seviyorum","İspanyolum"], c:1},
+                {q:"İspanyolca arkadaş?", o:["amigo","hermano","hermana","padre"], c:0},
+                {q:"« Te quiero » ne demek?", o:["Seni seviyorum","Seni özlüyorum","Seni bekliyorum","Seni görüyorum"], c:0},
+                {q:"İspanyolca günaydın?", o:["Buenas noches","Buenas tardes","Buenos días","Hola"], c:2},
+                {q:"« Perdón » ne demek?", o:["Teşekkürler","Affedersiniz","Lütfen","Rica ederim"], c:1},
+                {q:"İspanyolca araba?", o:["casa","coche","libro","agua"], c:1},
+                {q:"« Estoy cansado » ne demek?", o:["Açım","Yorgunum","Mutluyum","Üzgünüm"], c:1},
+                {q:"İspanyolca hayır?", o:["Sí","No","Tal vez","Claro"], c:1},
+                {q:"« ¿Habla usted español? »", o:["İspanyolca biliyor musunuz?","İspanyol musunuz?","İspanya'da mısınız?","İspanyolca seviyor musunuz?"], c:0},
+                {q:"İspanyolca kadın?", o:["hombre","mujer","niño","niña"], c:1},
+                {q:"« Me gusta » ne demek?", o:["İstiyorum","Seviyorum","Yapıyorum","Görüyorum"], c:1},
+                {q:"İspanyolca teşekkürlerin cevabı?", o:["Gracias","De nada","Por favor","Perdón"], c:1}
+            ],
+            japanese: [
+                {q:"「こんにちは」 ne demektir?", o:["Günaydın","Merhaba","İyi akşamlar","Hoşça kal"], c:1},
+                {q:"「ありがとう」 ne demek?", o:["Lütfen","Teşekkürler","Özür dilerim","Evet"], c:1},
+                {q:"Japonca evet?", o:["いいえ","はい","たぶん","わかりました"], c:1},
+                {q:"「私は」 ne demek?", o:["Ben severim","Ben","Ben istiyorum","Ben yapıyorum"], c:1},
+                {q:"「お元気ですか」 ne sorar?", o:["Adın ne?","Nasılsın?","Nerelisin?","Kaç yaşındasın?"], c:1},
+                {q:"Japonca su?", o:["パン","水","ミルク","お酒"], c:1},
+                {q:"「さようなら」 ne zaman kullanılır?", o:["Merhaba","Hoşça kal","Teşekkür","Özür"], c:1},
+                {q:"「お願いします」 ne demek?", o:["Teşekkürler","Lütfen","Özür dilerim","Evet"], c:1},
+                {q:"Japonca ekmek?", o:["水","パン","ご飯","肉"], c:1},
+                {q:"「わかりません」 ne demek?", o:["Bilmiyorum","Anlamıyorum","İstemiyorum","Görmüyorum"], c:1},
+                {q:"「ありがとうございます」 ne demek?", o:["Rica ederim","Çok teşekkürler","Özür dilerim","Lütfen"], c:1},
+                {q:"Japonca kitap?", o:["本","ノート","ペン","机"], c:0},
+                {q:"「どこですか」 ne sorar?", o:["Kim?","Ne?","Nerede?","Ne zaman?"], c:2},
+                {q:"「いくらですか」 ne demek?", o:["Saat kaç?","Ne kadar?","Nerede?","Nasıl?"], c:1},
+                {q:"Japonca güzel?", o:["いい","きれい","大きい","小さい"], c:1},
+                {q:"「欲しいです」 ne demek?", o:["İstiyorum","Yapıyorum","Gidiyorum","Seviyorum"], c:0},
+                {q:"「どういたしまして」 ne demek?", o:["Teşekkürler","Rica ederim","Lütfen","Özür dilerim"], c:1},
+                {q:"Japonca ev?", o:["家","車","学校","町"], c:0},
+                {q:"「日本語が少し話せます」", o:["Japonca bilmiyorum","Biraz Japonca konuşabiliyorum","Japonca seviyorum","Japonum"], c:1},
+                {q:"Japonca arkadaş?", o:["友達","兄","姉","父"], c:0},
+                {q:"「好きです」 ne demek?", o:["Seni seviyorum","Seni özlüyorum","Seni bekliyorum","Seni görüyorum"], c:0},
+                {q:"Japonca günaydın?", o:["こんばんは","おはようございます","こんにちは","さようなら"], c:1},
+                {q:"「すみません」 ne demek?", o:["Teşekkürler","Affedersiniz","Lütfen","Rica ederim"], c:1},
+                {q:"Japonca araba?", o:["家","車","本","水"], c:1},
+                {q:"「疲れました」 ne demek?", o:["Açım","Yorgunum","Mutluyum","Üzgünüm"], c:1},
+                {q:"Japonca hayır?", o:["はい","いいえ","たぶん","わかりました"], c:1},
+                {q:"「日本語が話せますか」", o:["Japonca konuşabiliyor musunuz?","Japon musunuz?","Japonya'da mısınız?","Japonca seviyor musunuz?"], c:0},
+                {q:"Japonca kadın?", o:["男","女","子供","少女"], c:1},
+                {q:"「好きです」 ne demek?", o:["İstiyorum","Seviyorum","Yapıyorum","Görüyorum"], c:1},
+                {q:"Japonca teşekkürlerin cevabı?", o:["ありがとう","どういたしまして","お願いします","すみません"], c:1}
+            ],
+            korean: [
+                {q:"「안녕하세요」 ne demektir?", o:["Hoşça kal","Merhaba","Teşekkürler","Lütfen"], c:1},
+                {q:"「감사합니다」 ne demek?", o:["Lütfen","Teşekkürler","Özür dilerim","Evet"], c:1},
+                {q:"Korece evet?", o:["아니요","네","아마","알겠습니다"], c:1},
+                {q:"「저는」 ne demek?", o:["Ben severim","Ben","Ben istiyorum","Ben yapıyorum"], c:1},
+                {q:"「어떻게 지내세요?」 ne sorar?", o:["Adın ne?","Nasılsın?","Nerelisin?","Kaç yaşındasın?"], c:1},
+                {q:"Korece su?", o:["빵","물","우유","술"], c:1},
+                {q:"「안녕히 가세요」 ne zaman kullanılır?", o:["Merhaba","Hoşça kal","Teşekkür","Özür"], c:1},
+                {q:"「부탁합니다」 ne demek?", o:["Teşekkürler","Lütfen","Özür dilerim","Evet"], c:1},
+                {q:"Korece ekmek?", o:["물","빵","밥","고기"], c:1},
+                {q:"「모르겠어요」 ne demek?", o:["Bilmiyorum","Anlamıyorum","İstemiyorum","Görmüyorum"], c:0},
+                {q:"「정말 감사합니다」 ne demek?", o:["Rica ederim","Çok teşekkürler","Özür dilerim","Lütfen"], c:1},
+                {q:"Korece kitap?", o:["책","공책","펜","책상"], c:0},
+                {q:"「어디예요?」 ne sorar?", o:["Kim?","Ne?","Nerede?","Ne zaman?"], c:2},
+                {q:"「얼마예요?」 ne demek?", o:["Saat kaç?","Ne kadar?","Nerede?","Nasıl?"], c:1},
+                {q:"Korece güzel?", o:["좋은","아름다운","큰","작은"], c:1},
+                {q:"「고 싶어요」 ne demek?", o:["İstiyorum","Yapıyorum","Gidiyorum","Seviyorum"], c:0},
+                {q:"「천만에요」 ne demek?", o:["Teşekkürler","Rica ederim","Lütfen","Özür dilerim"], c:1},
+                {q:"Korece ev?", o:["집","차","학교","도시"], c:0},
+                {q:"「한국어 조금 할 수 있어요」", o:["Korece bilmiyorum","Biraz Korece konuşabiliyorum","Korece seviyorum","Koreliyim"], c:1},
+                {q:"Korece arkadaş?", o:["친구","형","누나","아버지"], c:0},
+                {q:"「사랑해요」 ne demek?", o:["Seni seviyorum","Seni özlüyorum","Seni bekliyorum","Seni görüyorum"], c:0},
+                {q:"Korece günaydın?", o:["안녕하세요","좋은 아침이에요","안녕히 주무세요","반갑습니다"], c:1},
+                {q:"「죄송합니다」 ne demek?", o:["Teşekkürler","Özür dilerim","Lütfen","Rica ederim"], c:1},
+                {q:"Korece araba?", o:["집","차","책","물"], c:1},
+                {q:"「피곤해요」 ne demek?", o:["Açım","Yorgunum","Mutluyum","Üzgünüm"], c:1},
+                {q:"Korece hayır?", o:["네","아니요","아마","알겠습니다"], c:1},
+                {q:"「한국어 하세요?」", o:["Korece konuşuyor musunuz?","Koreli misiniz?","Kore'de misiniz?","Korece seviyor musunuz?"], c:0},
+                {q:"Korece kadın?", o:["남자","여자","아이","소녀"], c:1},
+                {q:"「좋아해요」 ne demek?", o:["İstiyorum","Seviyorum","Yapıyorum","Görüyorum"], c:1},
+                {q:"Korece teşekkürlerin cevabı?", o:["감사합니다","천만에요","부탁합니다","죄송합니다"], c:1}
+            ],
+            russian: [
+                {q:"« Здравствуйте » ne demektir?", o:["Hoşça kal","Merhaba","Teşekkürler","Lütfen"], c:1},
+                {q:"« Спасибо » ne demek?", o:["Lütfen","Teşekkürler","Özür dilerim","Evet"], c:1},
+                {q:"Rusça evet?", o:["Нет","Да","Может быть","Хорошо"], c:1},
+                {q:"« Меня зовут » ne demek?", o:["Ben severim","Benim adım","Ben istiyorum","Ben yapıyorum"], c:1},
+                {q:"« Как дела? » ne sorar?", o:["Adın ne?","Nasılsın?","Nerelisin?","Kaç yaşındasın?"], c:1},
+                {q:"Rusça su?", o:["хлеб","вода","молоко","вино"], c:1},
+                {q:"« До свидания » ne zaman kullanılır?", o:["Merhaba","Hoşça kal","Teşekkür","Özür"], c:1},
+                {q:"« Пожалуйста » ne demek?", o:["Teşekkürler","Lütfen","Özür dilerim","Evet"], c:1},
+                {q:"Rusça ekmek?", o:["вода","хлеб","сыр","мясо"], c:1},
+                {q:"« Я не понимаю » ne demek?", o:["Bilmiyorum","Anlamıyorum","İstemiyorum","Görmüyorum"], c:1},
+                {q:"« Большое спасибо » ne demek?", o:["Rica ederim","Çok teşekkürler","Özür dilerim","Lütfen"], c:1},
+                {q:"Rusça kitap?", o:["книга","тетрадь","ручка","стол"], c:0},
+                {q:"« Где...? » ne sorar?", o:["Kim?","Ne?","Nerede?","Ne zaman?"], c:2},
+                {q:"« Сколько стоит? » ne demek?", o:["Saat kaç?","Ne kadar?","Nerede?","Nasıl?"], c:1},
+                {q:"Rusça güzel?", o:["хороший","красивый","большой","маленький"], c:1},
+                {q:"« Я хочу » ne demek?", o:["İstiyorum","Yapıyorum","Gidiyorum","Seviyorum"], c:0},
+                {q:"« Не за что » ne demek?", o:["Teşekkürler","Rica ederim","Lütfen","Özür dilerim"], c:1},
+                {q:"Rusça ev?", o:["дом","машина","школа","город"], c:0},
+                {q:"« Я немного говорю по-русски »", o:["Rusça bilmiyorum","Biraz Rusça konuşuyorum","Rusça seviyorum","Rusum"], c:1},
+                {q:"Rusça arkadaş?", o:["друг","брат","сестра","отец"], c:0},
+                {q:"« Я тебя люблю » ne demek?", o:["Seni seviyorum","Seni özlüyorum","Seni bekliyorum","Seni görüyorum"], c:0},
+                {q:"Rusça günaydın?", o:["Добрый вечер","Доброе утро","Добрый день","Привет"], c:1},
+                {q:"« Извините » ne demek?", o:["Teşekkürler","Özür dilerim","Lütfen","Rica ederim"], c:1},
+                {q:"Rusça araba?", o:["дом","машина","книга","вода"], c:1},
+                {q:"« Я устал » ne demek?", o:["Açım","Yorgunum","Mutluyum","Üzgünüm"], c:1},
+                {q:"Rusça hayır?", o:["Да","Нет","Может быть","Хорошо"], c:1},
+                {q:"« Вы говорите по-русски? »", o:["Rusça konuşuyor musunuz?","Rus musunuz?","Rusya'da mısınız?","Rusça seviyor musunuz?"], c:0},
+                {q:"Rusça kadın?", o:["мужчина","женщина","ребёнок","девочка"], c:1},
+                {q:"« Мне нравится » ne demek?", o:["İstiyorum","Seviyorum","Yapıyorum","Görüyorum"], c:1},
+                {q:"Rusça teşekkürlerin cevabı?", o:["Спасибо","Пожалуйста","Извините","Хорошо"], c:1}
+            ]
+        };
 
+        let currentLang = null;
+        let questions = [];
         let currentQuestion = 0;
-        let userAnswers = new Array(questions.length).fill(null);
+        let userAnswers = [];
 
+        const langScreen = document.getElementById('langScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const headerDesc = document.getElementById('headerDesc');
         const questionNumberEl = document.getElementById('questionNumber');
         const questionTextEl = document.getElementById('questionText');
         const optionsEl = document.getElementById('options');
@@ -304,30 +362,46 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const submitBtn = document.getElementById('submitBtn');
-        const quizArea = document.getElementById('quizArea');
-        const resultScreen = document.getElementById('resultScreen');
+
+        function startQuiz(lang) {
+            currentLang = lang;
+            questions = allQuestions[lang];
+            currentQuestion = 0;
+            userAnswers = new Array(questions.length).fill(null);
+
+            const langNames = {
+                japanese: "Japonca",
+                korean: "Korece",
+                russian: "Rusça",
+                english: "İngilizce",
+                french: "Fransızca",
+                spanish: "İspanyolca"
+            };
+            headerDesc.textContent = langNames[lang] + " • 30 Soru";
+
+            langScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
 
         function loadQuestion() {
             const q = questions[currentQuestion];
             questionNumberEl.textContent = `Soru ${currentQuestion + 1} / ${questions.length}`;
-            questionTextEl.textContent = q.question;
-            
+            questionTextEl.textContent = q.q;
+
             optionsEl.innerHTML = '';
-            q.options.forEach((opt, index) => {
+            q.o.forEach((opt, index) => {
                 const div = document.createElement('div');
-                div.className = 'option';
-                if (userAnswers[currentQuestion] === index) {
-                    div.classList.add('selected');
-                }
+                div.className = 'option' + (userAnswers[currentQuestion] === index ? ' selected' : '');
                 div.textContent = opt;
                 div.onclick = () => selectOption(index);
                 optionsEl.appendChild(div);
             });
 
             progressEl.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-
             prevBtn.disabled = currentQuestion === 0;
-            
+
             if (currentQuestion === questions.length - 1) {
                 nextBtn.classList.add('hidden');
                 submitBtn.classList.remove('hidden');
@@ -339,8 +413,7 @@
 
         function selectOption(index) {
             userAnswers[currentQuestion] = index;
-            const options = optionsEl.querySelectorAll('.option');
-            options.forEach((opt, i) => {
+            optionsEl.querySelectorAll('.option').forEach((opt, i) => {
                 opt.classList.toggle('selected', i === index);
             });
         }
@@ -359,53 +432,59 @@
             }
         };
 
-        submitBtn.onclick = () => {
-            showResults();
-        };
+        submitBtn.onclick = () => showResults();
 
         function showResults() {
-            let correctCount = 0;
+            let correct = 0;
             questions.forEach((q, i) => {
-                if (userAnswers[i] === q.correct) correctCount++;
+                if (userAnswers[i] === q.c) correct++;
             });
 
-            const percentage = (correctCount / questions.length) * 100;
-            let level, description;
+            const pct = (correct / questions.length) * 100;
+            let level, desc;
 
-            if (percentage >= 90) {
-                level = "C1 - Advanced";
-                description = "Harika! İngilizcen ileri seviyede. Akademik ve profesyonel ortamlarda rahatlıkla kullanabilirsin.";
-            } else if (percentage >= 75) {
-                level = "B2 - Upper Intermediate";
-                description = "Çok iyi! Konuşma, yazma ve anlama konusunda oldukça yetkinsin. Biraz daha pratikle C1'e çıkabilirsin.";
-            } else if (percentage >= 55) {
-                level = "B1 - Intermediate";
-                description = "İyi bir orta seviyedesin. Günlük konuşmaları anlayıp katılabilirsin. Kelime dağarcığını ve dilbilgisini güçlendirmeni öneririm.";
-            } else if (percentage >= 35) {
-                level = "A2 - Elementary";
-                description = "Temel seviyedesin. Basit cümleler kurabiliyorsun. Düzenli pratik ve kelime çalışmasıyla hızla ilerleyebilirsin.";
+            if (pct >= 90) {
+                level = "C1 – İleri Seviye";
+                desc = "Harika! Bu dilde ileri seviyedesin. Akıcı konuşup yazabilirsin.";
+            } else if (pct >= 75) {
+                level = "B2 – Orta-Üstü";
+                desc = "Çok iyi! Günlük ve birçok profesyonel durumda rahat kullanabilirsin.";
+            } else if (pct >= 55) {
+                level = "B1 – Orta Seviye";
+                desc = "İyi bir orta seviyedesin. Temel konuşmaları anlayıp katılabilirsin.";
+            } else if (pct >= 35) {
+                level = "A2 – Temel Seviye";
+                desc = "Temel seviyedesin. Basit cümleler kurabiliyorsun, pratikle hızla ilerlersin.";
             } else {
-                level = "A1 - Beginner";
-                description = "Yeni başlıyorsun. Temel kelimeler ve basit cümle yapılarıyla başla. Kısa sürede ilerleme göreceksin!";
+                level = "A1 – Başlangıç";
+                desc = "Yeni başlıyorsun. Temel kelime ve kalıplarla başla, kısa sürede yol alırsın.";
             }
 
-            document.getElementById('scoreDisplay').textContent = `\( {correctCount}/ \){questions.length}`;
+            document.getElementById('scoreDisplay').textContent = `\( {correct}/ \){questions.length}`;
             document.getElementById('levelDisplay').textContent = level;
-            document.getElementById('description').textContent = description;
+            document.getElementById('description').textContent = desc;
 
-            quizArea.style.display = 'none';
-            resultScreen.style.display = 'block';
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            headerDesc.textContent = "Test Sonucu";
         }
 
         function restartQuiz() {
             currentQuestion = 0;
             userAnswers = new Array(questions.length).fill(null);
-            quizArea.style.display = 'block';
-            resultScreen.style.display = 'none';
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            const langNames = {japanese:"Japonca",korean:"Korece",russian:"Rusça",english:"İngilizce",french:"Fransızca",spanish:"İspanyolca"};
+            headerDesc.textContent = langNames[currentLang] + " • 30 Soru";
             loadQuestion();
         }
 
-        loadQuestion();
+        function backToLang() {
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            langScreen.classList.remove('hidden');
+            headerDesc.textContent = "Hangi dili test etmek istiyorsun?";
+        }
     </script>
 </body>
-</html>
+    </html>
